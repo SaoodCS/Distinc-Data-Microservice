@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "serve-dev": "cd functions && npm run serve-dev",
+    "serve-prod": "cd functions && npm run serve-prod",
+    "deploy-dev": "cd functions && npm run build && firebase deploy --project [dev-project-id] --only functions:[routePrefixName]",
+    "deploy-prod": "cd functions && npm run build && firebase deploy --project [prod-project-id] --only functions:[routePrefixName]",
+    "prettify": "cd functions && npm run prettify",
+    "lint-ts": "cd functions && npm run lint-and-ts-errors",
+    "lint-fix": "cd functions && npm run lint-fix",
+    "install": "cd functions && npm install",
+    "test": "cd functions && npm run test",
+    "test-watch": "cd functions && npm run test-watch",
+    "view-unused-exports": "cd functions && npm run view-unused-exports"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "private": true
+}

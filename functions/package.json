@@ -1,0 +1,54 @@
+{
+	"name": "functions",
+	"scripts": {
+		"build": "tsc",
+		"build:watch": "tsc --watch",
+		"serve-dev": "npm run build -- --watch | firebase serve --only functions --project [dev-project] --port=9000",
+		"serve-prod": "npm run build -- --watch | firebase serve --only functions --project [prod-project] --port=9000",
+		"shell": "npm run build && firebase functions:shell",
+		"start": "npm run shell",
+		"deploy": "firebase deploy --only functions",
+		"logs": "firebase functions:log",
+		"ts-errors": "tsc --noEmit --pretty",
+		"lint": "cd .. && eslint . --ignore-pattern functions/lib",
+		"lint-and-ts-errors": "concurrently \"npm run ts-errors\" \"npm run lint\" --success all --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --group --names \"TS-ERROR-CHECK,LINT-ERROR-CHECK\"",
+		"lint-fix": "cd .. && eslint . --fix --ignore-pattern functions/lib",
+		"prettify": "prettier --config .prettierrc.json --write \"src/**/*.ts\"",
+		"test": "jest",
+		"test-watch": "jest --watchAll",
+		"view-unused-exports": "npx unimported"
+	},
+	"engines": {
+		"node": "16"
+	},
+	"main": "lib/index.js",
+	"dependencies": {
+		"firebase-admin": "^11.5.0",
+		"firebase-functions": "^4.2.0",
+		"node-fetch": "^2.6.6",
+		"nodemailer": "^6.9.4"
+	},
+	"devDependencies": {
+		"@types/jest": "^29.5.3",
+		"@types/node-fetch": "^2.6.4",
+		"@types/nodemailer": "^6.4.9",
+		"@typescript-eslint/eslint-plugin": "^6.2.1",
+		"@typescript-eslint/parser": "^6.2.1",
+		"concurrently": "^8.2.0",
+		"dotenv": "^16.3.1",
+		"eslint": "^8.47.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-import-resolver-typescript": "^3.6.0",
+		"eslint-plugin-import": "^2.28.0",
+		"eslint-plugin-prettier": "^5.0.0",
+		"eslint-plugin-security": "^1.7.1",
+		"eslint-plugin-unused-imports": "^3.0.0",
+		"firebase-functions-test": "^3.0.0",
+		"jest": "^29.6.2",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^3.0.1",
+		"ts-jest": "^29.1.1",
+		"typescript": "^4.9.5"
+	},
+	"private": true
+}

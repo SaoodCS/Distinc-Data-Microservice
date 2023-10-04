@@ -1,0 +1,3 @@
+.gitignore
+/lib
+jest.config.js
