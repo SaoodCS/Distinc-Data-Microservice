@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as functions from 'firebase-functions';
+import setSavingsAccount from './SetSavingsAccount/endpoint/endpoint';
 import Middleware from './global/middleware/Middleware';
-import subRouteName from './subRouteName/endpoint/endpoint';
 
 const app = express();
 Middleware.initAdminSDK();
@@ -10,8 +10,8 @@ app.use(Middleware.verifyHeaders);
 app.use(Middleware.verifyApiKey);
 
 // API Endpoints:
-app.post('/subRouteName', subRouteName);
+app.post('/setSavingsAccount', setSavingsAccount);
 
 // Export to Firebase Cloud Functions:
-const routePrefixName = functions.https.onRequest(app);
-export { routePrefixName };
+const dataService = functions.https.onRequest(app);
+export { dataService };

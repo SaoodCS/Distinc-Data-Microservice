@@ -1,4 +1,4 @@
-name: Template Microservice CI/CD
+name: Data Microservice CI/CD
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - dev
 
 jobs:
-  microservice-ci-cd:
+  data-ci-cd:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Phase - Checkout repository
@@ -41,7 +41,7 @@ jobs:
           echo "$DEV_AND_PROD_ENV_VAR" > .env
           echo "$DEV_SA_KEY" > /tmp/service_account.json
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
-          firebase deploy --project [dev-project-id] --only functions:[routePrefixName]
+          firebase deploy --project distinc-dev --only functions:dataService
 
       - name: CD Phase - Deploy to Prod Project If Pushed To Prod Branch
         if: github.ref == 'refs/heads/prod'
@@ -52,4 +52,4 @@ jobs:
           echo "$DEV_AND_PROD_ENV_VAR" > .env
           echo "$PROD_SA_KEY" > /tmp/service_account.json
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
-          firebase deploy --project [prod-project-id] --only functions:[routePrefixName]
+          firebase deploy --project distinc-9ad9d --only functions:dataService

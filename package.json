@@ -2,8 +2,8 @@
   "scripts": {
     "serve-dev": "cd functions && npm run serve-dev",
     "serve-prod": "cd functions && npm run serve-prod",
-    "deploy-dev": "cd functions && npm run build && firebase deploy --project [dev-project-id] --only functions:[routePrefixName]",
-    "deploy-prod": "cd functions && npm run build && firebase deploy --project [prod-project-id] --only functions:[routePrefixName]",
+    "deploy-dev": "cd functions && npm run build && firebase deploy --project distinc-dev --only functions:dataService",
+    "deploy-prod": "cd functions && npm run build && firebase deploy --project distinc-9ad9d --only functions:dataService",
     "prettify": "cd functions && npm run prettify",
     "lint-ts": "cd functions && npm run lint-and-ts-errors",
     "lint-fix": "cd functions && npm run lint-fix",

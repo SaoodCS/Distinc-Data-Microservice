@@ -3,15 +3,15 @@ import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
 import ErrorThrower from '../../global/interface/ErrorThrower';
 import { resCodes } from '../../global/utils/resCode';
-import SubRouteNameReqBody from '../reqBodyClass/SubRouteNameReqBody';
+import SetSavingsAccountReqBody from '../reqBodyClass/SetSavingsAccountReqBody';
 
-export default async function subRouteName(
+export default async function setSavingsAccount(
    req: express.Request,
    res: express.Response,
 ): Promise<express.Response> {
    const reqBody = req.body;
    try {
-      if (!SubRouteNameReqBody.isValid(reqBody)) {
+      if (!SetSavingsAccountReqBody.isValid(reqBody)) {
          throw new ErrorThrower('Invalid Body Request', resCodes.BAD_REQUEST.code);
       }
       return res.status(200).send({ message: 'Empty Cloud Function' });
