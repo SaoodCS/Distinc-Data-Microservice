@@ -1,4 +1,4 @@
-name: Data Microservice CI/CD
+name: Data Microservice CI/CD Workflow
 
 on:
   push:
