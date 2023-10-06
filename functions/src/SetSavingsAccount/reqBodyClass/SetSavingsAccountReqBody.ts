@@ -4,6 +4,7 @@ export interface ISetSavingsAccountReqBody {
    accountName: string;
    targetToReach: OptionalNumberInput;
    currentBalance: OptionalNumberInput;
+   id?: number;
 }
 
 export default class SetSavingsAccountReqBody {

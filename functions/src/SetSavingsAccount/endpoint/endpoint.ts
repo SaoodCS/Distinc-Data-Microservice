@@ -22,13 +22,17 @@ export default async function setSavingsAccount(
       }
 
       let savingsAccountId: number = 0;
-      const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
-      if (!savingsAccountsData) {
-         savingsAccountId = Math.floor(Math.random() * 1000000);
-      } else {
-         do {
+      if (!reqBody.id) {
+         const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
+         if (!savingsAccountsData) {
             savingsAccountId = Math.floor(Math.random() * 1000000);
-         } while (savingsAccountsData[savingsAccountId] !== undefined);
+         } else {
+            do {
+               savingsAccountId = Math.floor(Math.random() * 1000000);
+            } while (savingsAccountsData[savingsAccountId] !== undefined);
+         }
+      } else {
+         savingsAccountId = reqBody.id;
       }
 
       await CollectionRef.savingsAccounts.doc(uid).set(

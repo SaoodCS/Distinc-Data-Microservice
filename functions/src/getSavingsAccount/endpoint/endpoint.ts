@@ -6,7 +6,7 @@ import ErrorThrower from '../../global/interface/ErrorThrower';
 import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
 
-export default async function getSavingsAccounts(
+export default async function getSavingsAccount(
    req: express.Request,
    res: express.Response,
 ): Promise<express.Response> {
@@ -17,9 +17,11 @@ export default async function getSavingsAccounts(
       }
 
       const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
+      
 
       if (!savingsAccountsData) {
-         return res.status(200).send(null);
+         console.log('reached');
+         return res.status(200).send({});
       }
 
       return res.status(200).send(savingsAccountsData);
