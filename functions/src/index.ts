@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as functions from 'firebase-functions';
 import setSavingsAccount from './SetSavingsAccount/endpoint/endpoint';
+import deleteSavingsAccount from './deleteSavingsAccount/endpoint/endpoint';
 import getSavingsAccount from './getSavingsAccount/endpoint/endpoint';
 import Middleware from './global/middleware/Middleware';
 
@@ -12,6 +13,7 @@ app.use(Middleware.verifyApiKey);
 
 // API Endpoints:
 app.post('/setSavingsAccount', setSavingsAccount);
+app.post('/deleteSavingsAccount', deleteSavingsAccount);
 app.get('/getSavingsAccount', getSavingsAccount);
 
 // Export to Firebase Cloud Functions:
