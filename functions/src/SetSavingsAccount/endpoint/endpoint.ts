@@ -1,7 +1,9 @@
 import type * as express from 'express';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
+import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper';
 import ErrorThrower from '../../global/interface/ErrorThrower';
+import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
 import SetSavingsAccountReqBody from '../reqBodyClass/SetSavingsAccountReqBody';
 
@@ -14,7 +16,30 @@ export default async function setSavingsAccount(
       if (!SetSavingsAccountReqBody.isValid(reqBody)) {
          throw new ErrorThrower('Invalid Body Request', resCodes.BAD_REQUEST.code);
       }
-      return res.status(200).send({ message: 'Empty Cloud Function' });
+      const { uid, error } = await FirebaseHelper.getUidFromAuthToken(req.headers.authorization);
+      if (!uid) {
+         throw new ErrorThrower(error!, resCodes.UNAUTHORIZED.code);
+      }
+
+      let savingsAccountId: number = 0;
+      do {
+         savingsAccountId = Math.floor(Math.random() * 1000000);
+      } while (
+         (await CollectionRef.savingsAccounts.doc(uid).get()).data()?.[savingsAccountId] !==
+         undefined
+      );
+
+      await CollectionRef.savingsAccounts.doc(uid).set(
+         {
+            [savingsAccountId]: {
+               ...reqBody,
+               id: savingsAccountId,
+            },
+         },
+         { merge: true },
+      );
+
+      return res.status(200).send({ message: 'Successfully set savings account' });
    } catch (error: unknown) {
       // Error handling code for caught errors here
 
