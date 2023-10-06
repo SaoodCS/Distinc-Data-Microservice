@@ -22,12 +22,14 @@ export default async function setSavingsAccount(
       }
 
       let savingsAccountId: number = 0;
-      do {
+      const savingsAccounts = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
+      if (!savingsAccounts) {
          savingsAccountId = Math.floor(Math.random() * 1000000);
-      } while (
-         (await CollectionRef.savingsAccounts.doc(uid).get()).data()?.[savingsAccountId] !==
-         undefined
-      );
+      } else {
+         do {
+            savingsAccountId = Math.floor(Math.random() * 1000000);
+         } while (savingsAccounts[savingsAccountId] !== undefined);
+      }
 
       await CollectionRef.savingsAccounts.doc(uid).set(
          {
