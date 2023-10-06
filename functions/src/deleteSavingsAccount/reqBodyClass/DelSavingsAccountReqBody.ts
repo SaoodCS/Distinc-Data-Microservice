@@ -5,6 +5,6 @@ export interface IDelSavingsAccountReqBody {
 export default class DelSavingsAccountReqBody {
    static isValid(body: unknown): body is IDelSavingsAccountReqBody {
       const reqBody = body as IDelSavingsAccountReqBody;
-      return typeof reqBody.id === 'string';
+      return typeof reqBody.id === 'number';
    }
 }
