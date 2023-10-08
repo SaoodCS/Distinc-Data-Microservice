@@ -4,6 +4,9 @@ import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
 import ErrorThrower from '../../global/interface/ErrorThrower';
 import { resCodes } from '../../global/utils/resCode';
 import DelCurrentAccountReqBody from '../reqBodyClass/DelCurrentAccountReqBody';
+import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper';
+import CollectionRef from '../../global/utils/CollectionRef';
+import { FieldValue } from 'firebase-admin/firestore';
 
 export default async function deleteCurrentAccount(
    req: express.Request,
@@ -14,10 +17,17 @@ export default async function deleteCurrentAccount(
       if (!DelCurrentAccountReqBody.isValid(reqBody)) {
          throw new ErrorThrower('Invalid Body Request', resCodes.BAD_REQUEST.code);
       }
-      return res.status(200).send({ message: 'Empty Cloud Function' });
-   } catch (error: unknown) {
-      // Error handling code for caught errors here
+      const { uid, error } = await FirebaseHelper.getUidFromAuthToken(req.headers.authorization);
+      if (!uid) {
+         throw new ErrorThrower(error!, resCodes.UNAUTHORIZED.code);
+      }
 
+      await CollectionRef.currentAccounts.doc(uid).update({
+         [reqBody.id]: FieldValue.delete(),
+      });
+
+      return res.status(200).send({ message: 'Successfully Deleted Current Account' });
+   } catch (error: unknown) {
       if (ErrorChecker.isErrorThrower(error)) {
          return ErrorHandler.handleErrorThrower(error, res);
       }

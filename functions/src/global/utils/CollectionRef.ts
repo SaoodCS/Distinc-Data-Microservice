@@ -9,6 +9,7 @@ class CollectionRef {
    static income = firestore.collection('income');
    static bankAccounts = firestore.collection('bankAccounts');
    static savingsAccounts = firestore.collection('savingsAccounts');
+   static currentAccounts = firestore.collection('currentAccounts');
 }
 
 export default CollectionRef;
