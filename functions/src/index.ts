@@ -4,6 +4,7 @@ import setSavingsAccount from './SetSavingsAccount/endpoint/endpoint';
 import deleteSavingsAccount from './deleteSavingsAccount/endpoint/endpoint';
 import getSavingsAccount from './getSavingsAccount/endpoint/endpoint';
 import Middleware from './global/middleware/Middleware';
+import setCurrentAccount from './setCurrentAccount/endpoint/endpoint';
 
 const app = express();
 Middleware.initAdminSDK();
@@ -15,6 +16,7 @@ app.use(Middleware.verifyApiKey);
 app.post('/setSavingsAccount', setSavingsAccount);
 app.post('/deleteSavingsAccount', deleteSavingsAccount);
 app.get('/getSavingsAccount', getSavingsAccount);
+app.post('/setCurrentAccount', setCurrentAccount);
 
 // Export to Firebase Cloud Functions:
 const dataService = functions.https.onRequest(app);
