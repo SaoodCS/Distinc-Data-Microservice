@@ -1,7 +1,7 @@
 export interface ISetIncomeReqBody {
    incomeName: string;
    incomeValue: number;
-   id?: string;
+   id?: number;
 }
 
 export default class SetIncomeReqBody {

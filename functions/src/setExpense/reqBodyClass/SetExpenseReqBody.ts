@@ -4,7 +4,7 @@ export interface ISetExpenseReqBody {
    expenseType: string;
    paused: string;
    paymentType: string;
-   id?: string;
+   id?: number;
 }
 
 export default class SetExpenseReqBody {
