@@ -1,8 +1,10 @@
+import { OptionalNumberInput } from '../../SetSavingsAccount/reqBodyClass/SetSavingsAccountReqBody';
+
 export interface ISetCurrentAccountReqBody {
    accountName: string;
    minCushion: number;
    accountType: string;
-   transferLeftoversTo?: string;
+   transferLeftoversTo: OptionalNumberInput;
    id?: number;
 }
 
@@ -14,7 +16,7 @@ export default class SetCurrentAccountReqBody {
          typeof accountName === 'string' &&
          typeof minCushion === 'number' &&
          typeof accountType === 'string' &&
-         (transferLeftoversTo === undefined || typeof transferLeftoversTo === 'string')
+         (transferLeftoversTo === '' || typeof transferLeftoversTo === 'number')
       );
    }
 }
