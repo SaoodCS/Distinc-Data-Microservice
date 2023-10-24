@@ -20,7 +20,7 @@ export default class SetCurrentAccountReqBody {
 
       const validSpendingAccount =
          typeof accountName === 'string' &&
-         minCushion === '' &&
+         (minCushion === '' || minCushion === 0) &&
          typeof accountType === 'string' &&
          (transferLeftoversTo === '' || typeof transferLeftoversTo === 'number');
 
