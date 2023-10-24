@@ -27,6 +27,35 @@ export default async function deleteSavingsAccount(
          [reqBody.id]: FieldValue.delete(),
       });
 
+      const currentAcc = (await CollectionRef.currentAccounts.doc(uid).get()).data();
+      if (currentAcc) {
+         for (const currentAccId in currentAcc) {
+            if (currentAcc[currentAccId].transferLeftoversTo === reqBody.id) {
+               await CollectionRef.currentAccounts.doc(uid).set(
+                  {
+                     [currentAccId]: {
+                        ...currentAcc[currentAccId],
+                        transferLeftoversTo: '',
+                     },
+                  },
+
+                  { merge: true },
+               );
+            }
+         }
+      }
+
+      const expenses = (await CollectionRef.expenses.doc(uid).get()).data();
+      if (expenses) {
+         for (const expenseId in expenses) {
+            if (expenses[expenseId].expenseType.includes(`Savings Transfer:${reqBody.id}`)) {
+               await CollectionRef.expenses.doc(uid).update({
+                  [expenseId]: FieldValue.delete(),
+               });
+            }
+         }
+      }
+
       return res.status(200).send({ message: 'Successfully Deleted Savings Account' });
    } catch (error: unknown) {
       // Error handling code for caught errors here

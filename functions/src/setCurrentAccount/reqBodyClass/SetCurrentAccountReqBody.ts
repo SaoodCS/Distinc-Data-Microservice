@@ -2,7 +2,7 @@ import { OptionalNumberInput } from '../../SetSavingsAccount/reqBodyClass/SetSav
 
 export interface ISetCurrentAccountReqBody {
    accountName: string;
-   minCushion: number;
+   minCushion: number | '';
    accountType: string;
    transferLeftoversTo: OptionalNumberInput;
    id?: number;
@@ -12,11 +12,21 @@ export default class SetCurrentAccountReqBody {
    static isValid(body: unknown): body is ISetCurrentAccountReqBody {
       const { accountName, minCushion, accountType, transferLeftoversTo } =
          body as ISetCurrentAccountReqBody;
-      return (
+      const isValidSalaryExpAccount =
          typeof accountName === 'string' &&
          typeof minCushion === 'number' &&
          typeof accountType === 'string' &&
-         (transferLeftoversTo === '' || typeof transferLeftoversTo === 'number')
-      );
+         (transferLeftoversTo === '' || typeof transferLeftoversTo === 'number');
+
+      const validSpendingAccount =
+         typeof accountName === 'string' &&
+         minCushion === '' &&
+         typeof accountType === 'string' &&
+         (transferLeftoversTo === '' || typeof transferLeftoversTo === 'number');
+
+      if (accountType === 'Salary & Expenses') return isValidSalaryExpAccount;
+      if (accountType === 'Spending') return validSpendingAccount;
+
+      return false;
    }
 }
