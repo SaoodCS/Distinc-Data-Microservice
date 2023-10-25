@@ -31,6 +31,7 @@ export default async function deleteSavingsAccount(
       if (currentAcc) {
          for (const currentAccId in currentAcc) {
             if (currentAcc[currentAccId].transferLeftoversTo === reqBody.id) {
+               // eslint-disable-next-line no-await-in-loop
                await CollectionRef.currentAccounts.doc(uid).set(
                   {
                      [currentAccId]: {
@@ -49,6 +50,7 @@ export default async function deleteSavingsAccount(
       if (expenses) {
          for (const expenseId in expenses) {
             if (expenses[expenseId].expenseType.includes(`Savings Transfer:${reqBody.id}`)) {
+               // eslint-disable-next-line no-await-in-loop
                await CollectionRef.expenses.doc(uid).update({
                   [expenseId]: FieldValue.delete(),
                });

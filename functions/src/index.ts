@@ -10,6 +10,7 @@ import getExpenses from './getExpense/endpoint/endpoint';
 import getIncomes from './getIncomes/endpoint/endpoint';
 import getSavingsAccount from './getSavingsAccount/endpoint/endpoint';
 import Middleware from './global/middleware/Middleware';
+import setCalculations from './setCalculations/endpoint/endpoint';
 import setCurrentAccount from './setCurrentAccount/endpoint/endpoint';
 import setExpense from './setExpense/endpoint/endpoint';
 import setIncome from './setIncome/endpoint/endpoint';
@@ -36,6 +37,8 @@ app.get('/getExpenses', getExpenses);
 app.post('/setIncome', setIncome);
 app.post('/deleteIncome', deleteIncome);
 app.get('/getIncomes', getIncomes);
+
+app.post('/setCalculations', setCalculations);
 
 // Export to Firebase Cloud Functions:
 const dataService = functions.https.onRequest(app);
