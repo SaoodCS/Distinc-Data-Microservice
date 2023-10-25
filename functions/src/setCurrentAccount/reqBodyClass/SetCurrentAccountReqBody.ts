@@ -1,4 +1,4 @@
-import { OptionalNumberInput } from '../../SetSavingsAccount/reqBodyClass/SetSavingsAccountReqBody';
+import type { OptionalNumberInput } from '../../SetSavingsAccount/reqBodyClass/SetSavingsAccountReqBody';
 
 export interface ISetCurrentAccountReqBody {
    accountName: string;
