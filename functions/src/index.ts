@@ -6,6 +6,7 @@ import deleteCurrentAccount from './deleteCurrentAccount/endpoint/endpoint';
 import deleteExpense from './deleteExpense/endpoint/endpoint';
 import deleteIncome from './deleteIncome/endpoint/endpoint';
 import deleteSavingsAccount from './deleteSavingsAccount/endpoint/endpoint';
+import getCalculations from './getCalculations/endpoint/endpoint';
 import getCurrentAccount from './getCurrentAccount/endpoint/endpoint';
 import getExpenses from './getExpense/endpoint/endpoint';
 import getIncomes from './getIncomes/endpoint/endpoint';
@@ -41,6 +42,7 @@ app.get('/getIncomes', getIncomes);
 
 app.post('/setCalculations', setCalculations);
 app.post('/deleteCalculations', deleteCalculations);
+app.get('/getCalculations', getCalculations);
 
 // Export to Firebase Cloud Functions:
 const dataService = functions.https.onRequest(app);
