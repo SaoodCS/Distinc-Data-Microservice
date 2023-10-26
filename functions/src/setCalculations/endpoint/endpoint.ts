@@ -1,7 +1,9 @@
 import type * as express from 'express';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
+import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper';
 import ErrorThrower from '../../global/interface/ErrorThrower';
+import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
 import SetCalculationsReqBody from '../reqBodyClass/SetCalculationsReqBody';
 
@@ -14,7 +16,27 @@ export default async function setCalculations(
       if (!SetCalculationsReqBody.isValid(reqBody)) {
          throw new ErrorThrower('Invalid Body Request', resCodes.BAD_REQUEST.code);
       }
-      return res.status(200).send({ message: 'Empty Cloud Function' });
+      const { uid, error } = await FirebaseHelper.getUidFromAuthToken(req.headers.authorization);
+      if (!uid) {
+         throw new ErrorThrower(error!, resCodes.UNAUTHORIZED.code);
+      }
+
+      const { savingsAccHistory } = reqBody;
+      const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
+
+      if (savingsAccountsData) {
+         for (const savingsAcc of savingsAccHistory) {
+            const { id, balance } = savingsAcc;
+            savingsAccountsData[id].currentBalance = balance;
+         }
+         await CollectionRef.savingsAccounts
+            .doc(uid)
+            .set({ ...savingsAccountsData }, { merge: true });
+      }
+
+      await CollectionRef.calculations.doc(uid).set({ ...reqBody }, { merge: true });
+
+      return res.status(200).send({ message: 'Successfully Set Calculation' });
    } catch (error: unknown) {
       // Error handling code for caught errors here
 
