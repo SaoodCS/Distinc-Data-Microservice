@@ -1,5 +1,4 @@
 import type * as express from 'express';
-import { FieldValue } from 'firebase-admin/firestore';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
 import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper';
@@ -8,7 +7,6 @@ import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
 import updateCalcArrayField from '../helpers/helpers';
 import SetCalculationsReqBody from '../reqBodyClass/SetCalculationsReqBody';
-import { ISetCalculationsReqBody } from './../reqBodyClass/SetCalculationsReqBody';
 
 export default async function setCalculations(
    req: express.Request,

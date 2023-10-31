@@ -1,7 +1,6 @@
 import type * as express from 'express';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
-import ErrorThrower from '../../global/interface/ErrorThrower';
 import { resCodes } from '../../global/utils/resCode';
 
 export default async function getCalculations(

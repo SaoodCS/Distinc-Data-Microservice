@@ -1,6 +1,6 @@
 import { FieldValue } from 'firebase-admin/firestore';
 import CollectionRef from '../../global/utils/CollectionRef';
-import { ISetCalculationsReqBody } from '../reqBodyClass/SetCalculationsReqBody';
+import type { ISetCalculationsReqBody } from '../reqBodyClass/SetCalculationsReqBody';
 
 export default async function updateCalcArrayField(
    reqBodyFieldData:
