@@ -1,11 +1,14 @@
 import type * as express from 'express';
+import { FieldValue } from 'firebase-admin/firestore';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
 import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper';
 import ErrorThrower from '../../global/interface/ErrorThrower';
 import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
+import updateCalcArrayField from '../helpers/helpers';
 import SetCalculationsReqBody from '../reqBodyClass/SetCalculationsReqBody';
+import { ISetCalculationsReqBody } from './../reqBodyClass/SetCalculationsReqBody';
 
 export default async function setCalculations(
    req: express.Request,
@@ -21,7 +24,7 @@ export default async function setCalculations(
          throw new ErrorThrower(error!, resCodes.UNAUTHORIZED.code);
       }
 
-      const { savingsAccHistory } = reqBody;
+      const { savingsAccHistory, analytics, distributer } = reqBody;
       const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
 
       if (savingsAccountsData) {
@@ -34,8 +37,28 @@ export default async function setCalculations(
             .set({ ...savingsAccountsData }, { merge: true });
       }
 
-      await CollectionRef.calculations.doc(uid).set({ ...reqBody }, { merge: true });
+      const { error: analyticsUpdateErr } = await updateCalcArrayField(analytics, 'analytics', uid);
+      if (analyticsUpdateErr) {
+         throw new ErrorThrower(analyticsUpdateErr, resCodes.INTERNAL_SERVER.code);
+      }
 
+      const { error: distributerUpdateErr } = await updateCalcArrayField(
+         distributer,
+         'distributer',
+         uid,
+      );
+      if (distributerUpdateErr) {
+         throw new ErrorThrower(distributerUpdateErr, resCodes.INTERNAL_SERVER.code);
+      }
+
+      const { error: savingsAccHistoryErr } = await updateCalcArrayField(
+         savingsAccHistory,
+         'savingsAccHistory',
+         uid,
+      );
+      if (savingsAccHistoryErr) {
+         throw new ErrorThrower(savingsAccHistoryErr, resCodes.INTERNAL_SERVER.code);
+      }
       return res.status(200).send({ message: 'Successfully Set Calculation' });
    } catch (error: unknown) {
       // Error handling code for caught errors here
