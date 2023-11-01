@@ -64,6 +64,8 @@ export default async function setSavingsAccount(
             [savingsAccountId]: {
                ...reqBody,
                id: savingsAccountId,
+               currentBalance: reqBody.currentBalance || 0,
+               targetToReach: reqBody.targetToReach || 0,
             },
          },
          { merge: true },

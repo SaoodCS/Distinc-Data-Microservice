@@ -1,4 +1,5 @@
 import type * as express from 'express';
+import ArrayOfObjects from '../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
 import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper';
@@ -25,7 +26,7 @@ export default async function setCalculations(
       const { savingsAccHistory, analytics, distributer } = reqBody;
 
       const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
-      if (savingsAccountsData) {
+      if (savingsAccountsData && !ArrayOfObjects.isEmpty(savingsAccHistory)) {
          for (const savingsAcc of savingsAccHistory) {
             const { id, balance } = savingsAcc;
             savingsAccountsData[id].currentBalance = balance;
@@ -49,14 +50,16 @@ export default async function setCalculations(
          throw new ErrorThrower(distributerUpdateErr, resCodes.INTERNAL_SERVER.code);
       }
 
-      const { error: savingsAccHistoryErr } = await updateCalcArrayField(
-         savingsAccHistory,
-         'savingsAccHistory',
-         uid,
-         'month',
-      );
-      if (savingsAccHistoryErr) {
-         throw new ErrorThrower(savingsAccHistoryErr, resCodes.INTERNAL_SERVER.code);
+      if (!ArrayOfObjects.isEmpty(savingsAccHistory)) {
+         const { error: savingsAccHistoryErr } = await updateCalcArrayField(
+            savingsAccHistory,
+            'savingsAccHistory',
+            uid,
+            'month',
+         );
+         if (savingsAccHistoryErr) {
+            throw new ErrorThrower(savingsAccHistoryErr, resCodes.INTERNAL_SERVER.code);
+         }
       }
       return res.status(200).send({ message: 'Successfully Set Calculation' });
    } catch (error: unknown) {
