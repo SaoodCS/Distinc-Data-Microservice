@@ -25,6 +25,7 @@ export default async function setSavingsAccount(
          throw new ErrorThrower(error!, resCodes.UNAUTHORIZED.code);
       }
 
+      // Set the savingsAccountId if it is not provided in the request body (i.e. if it is a new savings account)
       let savingsAccountId: number = 0;
       if (!reqBody.id) {
          const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
@@ -44,27 +45,37 @@ export default async function setSavingsAccount(
       const calcData = (await CollectionRef.calculations.doc(uid).get()).data();
       const savingsAccHistory: ISavingsAccHistory | undefined = calcData?.savingsAccHistory;
       if (savingsAccHistory && reqBody.currentBalance) {
+         // Find the matching date and savings acc id object in the savingsAccHistory array:
          const currentDate = DateHelper.toDDMMYYYY(new Date());
-         const matchingDateObj = ArrayOfObjects.getObjWithKeyValuePair(
+         const matchingIdObjects = ArrayOfObjects.getObjectsWithKeyValuePair(
             savingsAccHistory,
-            'timestamp',
-            currentDate,
+            'id',
+            savingsAccountId,
          );
-         if (matchingDateObj) {
-            const isReqBodyBalanceDifferent = matchingDateObj.balance !== reqBody.currentBalance;
-            if (isReqBodyBalanceDifferent) {
-               const updatedMatchingDateObj: ISavingsAccHistory[0] = {
-                  balance: reqBody.currentBalance,
-                  id: savingsAccountId,
-                  timestamp: matchingDateObj.timestamp,
-               };
-               await CollectionRef.calculations.doc(uid).update({
-                  savingsAccHistory: FieldValue.arrayRemove(matchingDateObj),
-               });
-               await CollectionRef.calculations.doc(uid).update({
-                  savingsAccHistory: FieldValue.arrayUnion(updatedMatchingDateObj),
-               });
+         if (matchingIdObjects) {
+            const matchingDateObj = ArrayOfObjects.getObjWithKeyValuePair(
+               matchingIdObjects,
+               'timestamp',
+               currentDate,
+            );
+            // If the matching date and id obj exists, then update the currentBalance if it is different from the reqBody currentBalance:   
+            if (matchingDateObj) {
+               const isReqBodyBalanceDifferent = matchingDateObj.balance !== reqBody.currentBalance;
+               if (isReqBodyBalanceDifferent) {
+                  const updatedMatchingDateObj: ISavingsAccHistory[0] = {
+                     balance: reqBody.currentBalance,
+                     id: savingsAccountId,
+                     timestamp: matchingDateObj.timestamp,
+                  };
+                  await CollectionRef.calculations.doc(uid).update({
+                     savingsAccHistory: FieldValue.arrayRemove(matchingDateObj),
+                  });
+                  await CollectionRef.calculations.doc(uid).update({
+                     savingsAccHistory: FieldValue.arrayUnion(updatedMatchingDateObj),
+                  });
+               }
             }
+            //TODO: if it doesn't exist and tracking is set to true, then add the reqBody currentBalance, id, and timestamp as a new object in the savingsAccHistory array:
          }
       }
 

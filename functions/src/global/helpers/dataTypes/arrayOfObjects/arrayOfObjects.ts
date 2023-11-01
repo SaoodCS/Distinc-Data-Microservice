@@ -35,6 +35,26 @@ class ArrayOfObjects {
    static getObjWithKeyValuePair<T>(arr: T[], key: keyof T, value: T[keyof T]): T {
       return arr.find((obj) => obj[key] === value) as T;
    }
+
+   static getObjectsWithKeyValuePair<T>(arr: T[], key: keyof T, value: T[keyof T]): T[] {
+      return arr.filter((obj) => obj[key] === value) as T[];
+   }
+
+   static filterOut<T>(arr: T[], key: keyof T, value: T[keyof T]): T[] {
+      return arr.filter((obj) => obj[key] !== value);
+   }
+
+   static filterIn<T>(arr: T[], key: keyof T, value: T[keyof T]): T[] {
+      return arr.filter((obj) => obj[key] === value);
+   }
+
+   static deleteDuplicates<T>(arr: T[], key: keyof T): T[] {
+      return arr.filter((obj, index, self) => self.findIndex((o) => o[key] === obj[key]) === index);
+   }
+
+   static combine<T>(arr1: T[], arr2: T[]): T[] {
+      return arr1.concat(arr2);
+   }
 }
 
 export default ArrayOfObjects;
