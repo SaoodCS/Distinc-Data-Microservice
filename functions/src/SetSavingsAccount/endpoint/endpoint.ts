@@ -8,7 +8,7 @@ import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper'
 import ErrorThrower from '../../global/interface/ErrorThrower';
 import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
-import { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
+import type { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
 import SetSavingsAccountReqBody from '../reqBodyClass/SetSavingsAccountReqBody';
 
 export default async function setSavingsAccount(
@@ -58,7 +58,7 @@ export default async function setSavingsAccount(
                'timestamp',
                currentDate,
             );
-            // If the matching date and id obj exists, then update the currentBalance if it is different from the reqBody currentBalance:   
+            // If the matching date and id obj exists, then update the currentBalance if it is different from the reqBody currentBalance:
             if (matchingDateObj) {
                const isReqBodyBalanceDifferent = matchingDateObj.balance !== reqBody.currentBalance;
                if (isReqBodyBalanceDifferent) {
