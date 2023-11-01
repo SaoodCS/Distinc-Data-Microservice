@@ -10,6 +10,7 @@ export default async function updateCalcArrayField(
       | ISetCalculationsReqBody['savingsAccHistory'],
    fieldKey: 'analytics' | 'distributer' | 'savingsAccHistory',
    uid: string,
+   matchSavingAccDateBy?: 'month' | 'day',
 ): Promise<{ error: string | undefined }> {
    try {
       const calculationsDoc = CollectionRef.calculations.doc(uid);
@@ -30,7 +31,7 @@ export default async function updateCalcArrayField(
       }
 
       // If the field does exist in the calcData, then search the field array for a matching month item:
-      let matchingMonthItem: typeof reqBodyFieldDataObj | undefined = undefined;
+      let matchingDateObj: typeof reqBodyFieldDataObj | undefined = undefined;
       // if the fieldKey is savingsAccHistory, then firstly we need to find the matching id items if any and then the matching month item:
       if (fieldKey === 'savingsAccHistory') {
          const objectsWithMatchingIds = ArrayOfObjects.getObjectsWithKeyValuePair(
@@ -39,22 +40,31 @@ export default async function updateCalcArrayField(
             (reqBodyFieldDataObj as ISetCalculationsReqBody['savingsAccHistory'][0]).id,
          );
          if (objectsWithMatchingIds.length > 0) {
-            matchingMonthItem = objectsWithMatchingIds.find(
-               (item: typeof reqBodyFieldDataObj) =>
-                  item.timestamp.split('/')[1] === reqBodyFieldDataObj.timestamp.split('/')[1],
-            );
+            if (matchSavingAccDateBy === 'month') {
+               matchingDateObj = objectsWithMatchingIds.find(
+                  (item: typeof reqBodyFieldDataObj) =>
+                     item.timestamp.split('/')[1] === reqBodyFieldDataObj.timestamp.split('/')[1],
+               );
+            }
+            if (matchSavingAccDateBy === 'day') {
+               matchingDateObj = ArrayOfObjects.getObjWithKeyValuePair(
+                  objectsWithMatchingIds,
+                  'timestamp',
+                  reqBodyFieldDataObj.timestamp,
+               );
+            }
          }
       } else {
-         matchingMonthItem = firestoreFieldData.find(
+         matchingDateObj = firestoreFieldData.find(
             (item: typeof reqBodyFieldDataObj) =>
                item.timestamp.split('/')[1] === reqBodyFieldDataObj.timestamp.split('/')[1],
          );
       }
 
       // Update the matching month object in the field array if it exists, otherwise update the field array by adding the reqBodyFieldData as a new object in the array:
-      if (matchingMonthItem) {
+      if (matchingDateObj) {
          await CollectionRef.calculations.doc(uid).update({
-            [fieldKey]: FieldValue.arrayRemove(matchingMonthItem),
+            [fieldKey]: FieldValue.arrayRemove(matchingDateObj),
          });
          await CollectionRef.calculations.doc(uid).update({
             [fieldKey]: FieldValue.arrayUnion(reqBodyFieldDataObj),

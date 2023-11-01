@@ -1,6 +1,4 @@
 import type * as express from 'express';
-import { FieldValue } from 'firebase-admin/firestore';
-import ArrayOfObjects from '../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import DateHelper from '../../global/helpers/dataTypes/date/DateHelper';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
@@ -8,6 +6,7 @@ import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper'
 import ErrorThrower from '../../global/interface/ErrorThrower';
 import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
+import updateCalcArrayField from '../../setCalculations/helpers/helpers';
 import type { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
 import SetSavingsAccountReqBody from '../reqBodyClass/SetSavingsAccountReqBody';
 
@@ -41,41 +40,21 @@ export default async function setSavingsAccount(
       }
 
       // Update the matching date object's current balance in the savingsAccHistory array in the calculations document:
-      type ISavingsAccHistory = ISetCalculationsReqBody['savingsAccHistory'];
-      const calcData = (await CollectionRef.calculations.doc(uid).get()).data();
-      const savingsAccHistory: ISavingsAccHistory | undefined = calcData?.savingsAccHistory;
-      if (savingsAccHistory && reqBody.currentBalance) {
-         // Find the matching date and savings acc id object in the savingsAccHistory array:
-         const currentDate = DateHelper.toDDMMYYYY(new Date());
-         const matchingIdObjects = ArrayOfObjects.getObjectsWithKeyValuePair(
-            savingsAccHistory,
-            'id',
-            savingsAccountId,
+      type ISavingsAccHistoryObj = ISetCalculationsReqBody['savingsAccHistory'][0];
+      if (reqBody.isTracked === 'true') {
+         const savingsAccHistoryObj: ISavingsAccHistoryObj = {
+            balance: reqBody.currentBalance || 0,
+            id: savingsAccountId,
+            timestamp: DateHelper.toDDMMYYYY(new Date()),
+         };
+         const { error } = await updateCalcArrayField(
+            [savingsAccHistoryObj],
+            'savingsAccHistory',
+            uid,
+            'day',
          );
-         if (matchingIdObjects) {
-            const matchingDateObj = ArrayOfObjects.getObjWithKeyValuePair(
-               matchingIdObjects,
-               'timestamp',
-               currentDate,
-            );
-            // If the matching date and id obj exists, then update the currentBalance if it is different from the reqBody currentBalance:
-            if (matchingDateObj) {
-               const isReqBodyBalanceDifferent = matchingDateObj.balance !== reqBody.currentBalance;
-               if (isReqBodyBalanceDifferent) {
-                  const updatedMatchingDateObj: ISavingsAccHistory[0] = {
-                     balance: reqBody.currentBalance,
-                     id: savingsAccountId,
-                     timestamp: matchingDateObj.timestamp,
-                  };
-                  await CollectionRef.calculations.doc(uid).update({
-                     savingsAccHistory: FieldValue.arrayRemove(matchingDateObj),
-                  });
-                  await CollectionRef.calculations.doc(uid).update({
-                     savingsAccHistory: FieldValue.arrayUnion(updatedMatchingDateObj),
-                  });
-               }
-            }
-            //TODO: if it doesn't exist and tracking is set to true, then add the reqBody currentBalance, id, and timestamp as a new object in the savingsAccHistory array:
+         if (error) {
+            throw new ErrorThrower(error, resCodes.INTERNAL_SERVER.code);
          }
       }
 

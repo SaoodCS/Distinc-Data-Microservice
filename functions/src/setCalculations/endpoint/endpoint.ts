@@ -23,8 +23,8 @@ export default async function setCalculations(
       }
 
       const { savingsAccHistory, analytics, distributer } = reqBody;
-      const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
 
+      const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
       if (savingsAccountsData) {
          for (const savingsAcc of savingsAccHistory) {
             const { id, balance } = savingsAcc;
@@ -53,6 +53,7 @@ export default async function setCalculations(
          savingsAccHistory,
          'savingsAccHistory',
          uid,
+         'month',
       );
       if (savingsAccHistoryErr) {
          throw new ErrorThrower(savingsAccHistoryErr, resCodes.INTERNAL_SERVER.code);
