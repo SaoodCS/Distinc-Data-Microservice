@@ -1,7 +1,6 @@
 import DateHelper from '../../global/helpers/dataTypes/date/DateHelper';
-import SetCalculationsReqBody, {
-   ISetCalculationsReqBody,
-} from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
+import type { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
+import SetCalculationsReqBody from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
 
 interface IDelCalcDistItem {
    type: 'analyticsItem' | 'distributerItem' | 'savingsAccHistoryItem';
