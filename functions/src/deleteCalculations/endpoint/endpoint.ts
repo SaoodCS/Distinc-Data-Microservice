@@ -54,19 +54,42 @@ export default async function deleteCalculations(
          if (!calcDataFirestore) {
             throw new ErrorThrower('No calculations data found', resCodes.NOT_FOUND.code);
          }
-         const distributerArr = calcDataFirestore.distributer;
-         const analyticsArr = calcDataFirestore.analytics;
-         const savingsAccHistoryArr = calcDataFirestore.savingsAccHistory;
+         const distributerArr: ISetCalculationsReqBody['distributer'] | undefined =
+            calcDataFirestore.distributer;
+         if (distributerArr) {
+            const distributerArrFiltered = objectsWithMonthYear(distributerArr || [], monthYear);
+            if (distributerArrFiltered.length > 0) {
+               await CollectionRef.calculations.doc(uid).update({
+                  distributer: FieldValue.arrayRemove(...distributerArrFiltered),
+               });
+            }
+         }
 
-         const distributerArrFiltered = objectsWithMonthYear(distributerArr, monthYear);
-         const analyticsArrFiltered = objectsWithMonthYear(analyticsArr, monthYear);
-         const savingsAccHistoryArrFiltered = objectsWithMonthYear(savingsAccHistoryArr, monthYear);
-         // Remove objects with the same month and year from the distributer, analytics, and savingsAccHistory arrays
-         await CollectionRef.calculations.doc(uid).update({
-            distributer: FieldValue.arrayRemove(...distributerArrFiltered),
-            analytics: FieldValue.arrayRemove(...analyticsArrFiltered),
-            savingsAccHistory: FieldValue.arrayRemove(...savingsAccHistoryArrFiltered),
-         });
+         const analyticsArr: ISetCalculationsReqBody['analytics'] | undefined =
+            calcDataFirestore.analytics;
+         if (analyticsArr) {
+            const analyticsArrFiltered = objectsWithMonthYear(analyticsArr || [], monthYear);
+            if (analyticsArrFiltered.length > 0) {
+               await CollectionRef.calculations.doc(uid).update({
+                  analytics: FieldValue.arrayRemove(...analyticsArrFiltered),
+               });
+            }
+         }
+
+         const savingsAccHistoryArr: ISetCalculationsReqBody['savingsAccHistory'] | undefined =
+            calcDataFirestore.savingsAccHistory;
+         if (savingsAccHistoryArr) {
+            const savingsAccHistoryArrFiltered = objectsWithMonthYear(
+               savingsAccHistoryArr || [],
+               monthYear,
+            );
+            if (savingsAccHistoryArrFiltered.length > 0) {
+               await CollectionRef.calculations.doc(uid).update({
+                  savingsAccHistory: FieldValue.arrayRemove(...savingsAccHistoryArrFiltered),
+               });
+            }
+         }
+
          return res.status(200).send({ message: 'Successfully updated calculations' });
       }
 
@@ -92,7 +115,6 @@ export default async function deleteCalculations(
 
       return res.status(200).send({ message: 'Successfully updated calculations' });
    } catch (error: unknown) {
-      //console.log(error);
       if (ErrorChecker.isErrorThrower(error)) {
          return ErrorHandler.handleErrorThrower(error, res);
       }
