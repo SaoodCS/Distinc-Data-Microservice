@@ -61,7 +61,7 @@ export default class DelCalculationsReqBody {
    static isDelCalcDistMonthReq(body: unknown): body is IDelCalcDistMonth {
       const bodyAsCalcDistMonth = body as IDelCalcDistMonth;
       const isBodyTypeMonthStr = bodyAsCalcDistMonth['type'] === 'month';
-      const isMonthYearStrValid = DateHelper.isStringMMYYYY(bodyAsCalcDistMonth['monthYear']);
+      const isMonthYearStrValid = DateHelper.isStringMMYYYY(bodyAsCalcDistMonth['monthYear'] || '');
       return isBodyTypeMonthStr && isMonthYearStrValid;
    }
 
