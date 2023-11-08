@@ -84,7 +84,7 @@ export default class SetCalculationsReqBody {
       return true;
    }
 
-   private static isValidPrevMonth(
+   static isValidPrevMonth(
       prevMonth: unknown,
    ): prevMonth is ISetCalculationsReqBody['analytics'][0]['prevMonth'] {
       if (typeof prevMonth !== 'object') return false;

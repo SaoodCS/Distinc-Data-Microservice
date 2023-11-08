@@ -32,7 +32,7 @@ export default async function updateCalcArrayField(
 
       // If the field does exist in the calcData, then search the field array for a matching month item:
       let matchingDateObj: typeof reqBodyFieldDataObj | undefined = undefined;
-      // if the fieldKey is savingsAccHistory, then firstly we need to find the matching id items if any and then the matching month item:
+      // if the fieldKey is savingsAccHistory, then firstly we need to find the matching id items if any and then the matching month/day item:
       if (fieldKey === 'savingsAccHistory') {
          const objectsWithMatchingIds = ArrayOfObjects.getObjectsWithKeyValuePair(
             firestoreFieldData as ISetCalculationsReqBody['savingsAccHistory'],

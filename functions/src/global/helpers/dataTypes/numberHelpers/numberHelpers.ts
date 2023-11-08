@@ -13,6 +13,11 @@ class NumberHelpers {
       }
       return randomNumber;
    }
+
+   public static isStringNumber(str: string): boolean {
+      // check if the string ONLY contains numbers in it. e.g. '123' is true, '0112' is true but '01a2' is false
+      return /^\d+$/.test(str);
+   }
 }
 
 export default NumberHelpers;
