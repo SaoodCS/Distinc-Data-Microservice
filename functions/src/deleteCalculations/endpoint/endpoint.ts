@@ -28,13 +28,13 @@ export default async function deleteCalculations(
 
       // -- "DELETE THIS" Option on the Front-End -- //
       if (DelCalculationsReqBody.isDelCalcDistItemReq(reqBody)) {
-         if (DelCalculationsReqBody.isValidDistributerObj(reqBody.data)) {
-            // Delete the distributer object from the distributer array in the calculations collection
+         if (DelCalculationsReqBody.isValidDistStepsObj(reqBody.data)) {
+            // Delete the distSteps object from the distSteps array in the calculations collection
             await CollectionRef.calculations.doc(uid).update({
-               distributer: FieldValue.arrayRemove(reqBody.data),
+               distSteps: FieldValue.arrayRemove(reqBody.data),
             });
          } else if (DelCalculationsReqBody.isValidAnalyticsObj(reqBody.data)) {
-            // Delete the analytics object from the distributer array in the calculations collection
+            // Delete the analytics object from the distSteps array in the calculations collection
             await CollectionRef.calculations.doc(uid).update({
                analytics: FieldValue.arrayRemove(reqBody.data),
             });
@@ -54,13 +54,13 @@ export default async function deleteCalculations(
          if (!calcDataFirestore) {
             throw new ErrorThrower('No calculations data found', resCodes.NOT_FOUND.code);
          }
-         const distributerArr: ISetCalculationsReqBody['distributer'] | undefined =
-            calcDataFirestore.distributer;
-         if (distributerArr) {
-            const distributerArrFiltered = objectsWithMonthYear(distributerArr || [], monthYear);
-            if (distributerArrFiltered.length > 0) {
+         const distStepsArr: ISetCalculationsReqBody['distSteps'] | undefined =
+            calcDataFirestore.distSteps;
+         if (distStepsArr) {
+            const distStepsArrFiltered = objectsWithMonthYear(distStepsArr || [], monthYear);
+            if (distStepsArrFiltered.length > 0) {
                await CollectionRef.calculations.doc(uid).update({
-                  distributer: FieldValue.arrayRemove(...distributerArrFiltered),
+                  distSteps: FieldValue.arrayRemove(...distStepsArrFiltered),
                });
             }
          }

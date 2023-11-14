@@ -3,10 +3,10 @@ import type { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass
 import SetCalculationsReqBody from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
 
 interface IDelCalcDistItem {
-   type: 'analyticsItem' | 'distributerItem' | 'savingsAccHistoryItem';
+   type: 'analyticsItem' | 'distStepsItem' | 'savingsAccHistoryItem';
    data:
       | ISetCalculationsReqBody['analytics'][0]
-      | ISetCalculationsReqBody['distributer'][0]
+      | ISetCalculationsReqBody['distSteps'][0]
       | ISetCalculationsReqBody['savingsAccHistory'][0];
 }
 
@@ -42,11 +42,11 @@ export default class DelCalculationsReqBody {
       );
       if (isBodyTypeAnalytics && isBodyDataAnalytics) return true;
 
-      const isBodyTypeDistributer = bodyAsCalcDistItem['type'] === 'distributerItem';
-      const isBodyDataDistributer = DelCalculationsReqBody.isValidDistributerObj(
+      const isBodyTypedistSteps = bodyAsCalcDistItem['type'] === 'distStepsItem';
+      const isBodyDatadistSteps = DelCalculationsReqBody.isValidDistStepsObj(
          bodyAsCalcDistItem.data,
       );
-      if (isBodyTypeDistributer && isBodyDataDistributer) return true;
+      if (isBodyTypedistSteps && isBodyDatadistSteps) return true;
 
       const isBodyTypeSavingsAccHistory = bodyAsCalcDistItem['type'] === 'savingsAccHistoryItem';
       const isBodyDataSavingsAccHistory = DelCalculationsReqBody.isValidSavingsAccHistoryObj(
@@ -74,16 +74,16 @@ export default class DelCalculationsReqBody {
       return isTypeStr && isSavingsAccIdValid;
    }
 
-   static isValidDistributerObj(
+   static isValidDistStepsObj(
       bodyDataField: unknown,
-   ): bodyDataField is ISetCalculationsReqBody['distributer'][0] {
+   ): bodyDataField is ISetCalculationsReqBody['distSteps'][0] {
       if (typeof bodyDataField !== 'object' || bodyDataField === null) return false;
 
-      const timestamp = (bodyDataField as ISetCalculationsReqBody['distributer'][0])['timestamp'];
-      const msgs = (bodyDataField as ISetCalculationsReqBody['distributer'][0])['msgs'];
-      if (typeof timestamp !== 'string' || !Array.isArray(msgs)) return false;
-      for (const msg of msgs) {
-         if (typeof msg !== 'string') return false;
+      const timestamp = (bodyDataField as ISetCalculationsReqBody['distSteps'][0])['timestamp'];
+      const list = (bodyDataField as ISetCalculationsReqBody['distSteps'][0])['list'];
+      if (typeof timestamp !== 'string' || !Array.isArray(list)) return false;
+      for (const listItem of list) {
+         if (typeof listItem !== 'string') return false;
       }
       return true;
    }

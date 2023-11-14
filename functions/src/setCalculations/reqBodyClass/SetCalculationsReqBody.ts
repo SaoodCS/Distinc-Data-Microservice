@@ -1,7 +1,7 @@
 export interface ISetCalculationsReqBody {
-   distributer: {
+   distSteps: {
       timestamp: string;
-      msgs: string[];
+      list: string[];
    }[];
    savingsAccHistory: {
       id: number;
@@ -23,26 +23,26 @@ export interface ISetCalculationsReqBody {
 export default class SetCalculationsReqBody {
    static isValid(body: unknown): body is ISetCalculationsReqBody {
       if (typeof body !== 'object' || body === null) return false;
-      const distributer = (body as ISetCalculationsReqBody)['distributer'];
+      const distSteps = (body as ISetCalculationsReqBody)['distSteps'];
       const savingsAccHistory = (body as ISetCalculationsReqBody)['savingsAccHistory'];
       const analytics = (body as ISetCalculationsReqBody)['analytics'];
-      if (!SetCalculationsReqBody.isValidDistributer(distributer)) return false;
+      if (!SetCalculationsReqBody.isValidDistSteps(distSteps)) return false;
       if (!SetCalculationsReqBody.isValidSavingsAccHistory(savingsAccHistory)) return false;
       if (!SetCalculationsReqBody.isValidAnalytics(analytics)) return false;
       return true;
    }
 
-   private static isValidDistributer(
-      distributer: unknown,
-   ): distributer is ISetCalculationsReqBody['distributer'] {
-      if (!Array.isArray(distributer)) return false;
-      for (const item of distributer) {
+   private static isValidDistSteps(
+      distSteps: unknown,
+   ): distSteps is ISetCalculationsReqBody['distSteps'] {
+      if (!Array.isArray(distSteps)) return false;
+      for (const item of distSteps) {
          if (typeof item !== 'object') return false;
          const timestamp = item['timestamp'];
-         const msgs = item['msgs'];
-         if (typeof timestamp !== 'string' || !Array.isArray(msgs)) return false;
-         for (const msg of msgs) {
-            if (typeof msg !== 'string') return false;
+         const list = item['list'];
+         if (typeof timestamp !== 'string' || !Array.isArray(list)) return false;
+         for (const listItem of list) {
+            if (typeof listItem !== 'string') return false;
          }
       }
       return true;

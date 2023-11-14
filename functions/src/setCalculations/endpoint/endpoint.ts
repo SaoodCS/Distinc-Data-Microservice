@@ -23,7 +23,7 @@ export default async function setCalculations(
          throw new ErrorThrower(error!, resCodes.UNAUTHORIZED.code);
       }
 
-      const { savingsAccHistory, analytics, distributer } = reqBody;
+      const { savingsAccHistory, analytics, distSteps } = reqBody;
 
       const savingsAccountsData = (await CollectionRef.savingsAccounts.doc(uid).get()).data();
       if (savingsAccountsData && !ArrayOfObjects.isEmpty(savingsAccHistory)) {
@@ -41,13 +41,9 @@ export default async function setCalculations(
          throw new ErrorThrower(analyticsUpdateErr, resCodes.INTERNAL_SERVER.code);
       }
 
-      const { error: distributerUpdateErr } = await updateCalcArrayField(
-         distributer,
-         'distributer',
-         uid,
-      );
-      if (distributerUpdateErr) {
-         throw new ErrorThrower(distributerUpdateErr, resCodes.INTERNAL_SERVER.code);
+      const { error: distStepsUpdateErr } = await updateCalcArrayField(distSteps, 'distSteps', uid);
+      if (distStepsUpdateErr) {
+         throw new ErrorThrower(distStepsUpdateErr, resCodes.INTERNAL_SERVER.code);
       }
 
       if (!ArrayOfObjects.isEmpty(savingsAccHistory)) {

@@ -6,9 +6,9 @@ import type { ISetCalculationsReqBody } from '../reqBodyClass/SetCalculationsReq
 export default async function updateCalcArrayField(
    reqBodyFieldData:
       | ISetCalculationsReqBody['analytics']
-      | ISetCalculationsReqBody['distributer']
+      | ISetCalculationsReqBody['distSteps']
       | ISetCalculationsReqBody['savingsAccHistory'],
-   fieldKey: 'analytics' | 'distributer' | 'savingsAccHistory',
+   fieldKey: 'analytics' | 'distSteps' | 'savingsAccHistory',
    uid: string,
    matchSavingAccDateBy?: 'month' | 'day',
 ): Promise<{ error: string | undefined }> {
