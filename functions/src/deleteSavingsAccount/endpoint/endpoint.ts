@@ -7,7 +7,7 @@ import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper'
 import ErrorThrower from '../../global/interface/ErrorThrower';
 import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
-import { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
+import type { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
 import DelSavingsAccountReqBody from '../reqBodyClass/DelSavingsAccountReqBody';
 
 export default async function deleteSavingsAccount(
