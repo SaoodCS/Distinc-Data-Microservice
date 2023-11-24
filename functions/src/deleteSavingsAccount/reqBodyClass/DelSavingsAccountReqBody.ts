@@ -1,5 +1,5 @@
 export interface IDelSavingsAccountReqBody {
-   id: string;
+   id: number;
 }
 
 export default class DelSavingsAccountReqBody {

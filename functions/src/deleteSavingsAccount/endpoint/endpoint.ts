@@ -1,11 +1,13 @@
 import type * as express from 'express';
 import { FieldValue } from 'firebase-admin/firestore';
+import ArrayOfObjects from '../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import ErrorChecker from '../../global/helpers/errorCheckers/ErrorChecker';
 import ErrorHandler from '../../global/helpers/errorHandlers/ErrorHandler';
 import FirebaseHelper from '../../global/helpers/firebaseHelpers/FirebaseHelper';
 import ErrorThrower from '../../global/interface/ErrorThrower';
 import CollectionRef from '../../global/utils/CollectionRef';
 import { resCodes } from '../../global/utils/resCode';
+import { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
 import DelSavingsAccountReqBody from '../reqBodyClass/DelSavingsAccountReqBody';
 
 export default async function deleteSavingsAccount(
@@ -53,6 +55,25 @@ export default async function deleteSavingsAccount(
                // eslint-disable-next-line no-await-in-loop
                await CollectionRef.expenses.doc(uid).update({
                   [expenseId]: FieldValue.delete(),
+               });
+            }
+         }
+      }
+
+      const calculations = (await CollectionRef.calculations.doc(uid).get()).data() as
+         | ISetCalculationsReqBody
+         | undefined;
+      if (calculations) {
+         const savingsAccHistoryArr = calculations.savingsAccHistory;
+         if (savingsAccHistoryArr) {
+            const objectsToDelete = ArrayOfObjects.getObjectsWithKeyValuePair(
+               savingsAccHistoryArr,
+               'id',
+               reqBody.id,
+            );
+            if (objectsToDelete.length > 0) {
+               await CollectionRef.calculations.doc(uid).update({
+                  savingsAccHistory: FieldValue.arrayRemove(...objectsToDelete),
                });
             }
          }
