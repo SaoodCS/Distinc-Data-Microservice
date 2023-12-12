@@ -1,9 +1,10 @@
 {
   "scripts": {
+    "build": "cd functions && npm run build",
     "serve-dev": "cd functions && npm run serve-dev",
     "serve-prod": "cd functions && npm run serve-prod",
-    "deploy-dev": "cd functions && npm run build && firebase deploy --project distinc-dev --only functions:dataService",
-    "deploy-prod": "cd functions && npm run build && firebase deploy --project distinc-9ad9d --only functions:dataService",
+    "deploy-dev": "cd functions && npm run deploy-dev",
+    "deploy-prod": "cd functions && npm run deploy-prod",
     "prettify": "cd functions && npm run prettify",
     "lint-ts": "cd functions && npm run lint-and-ts-errors",
     "lint-fix": "cd functions && npm run lint-fix",
