@@ -11,7 +11,10 @@
     "install": "cd functions && npm install",
     "test": "cd functions && npm run test",
     "test-watch": "cd functions && npm run test-watch",
-    "view-unused-exports": "cd functions && npm run view-unused-exports"
+    "view-unused-exports": "cd functions && npm run view-unused-exports",
+    "git-prune-remote": "git remote update origin --prune",
+    "git-prune-local": "npx git-removed-branches --prune --force",
+    "git-sync": "git pull && npm run git-prune-remote && npm run git-prune-local"
   },
   "engines": {
     "node": "16"
