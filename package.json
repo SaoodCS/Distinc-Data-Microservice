@@ -14,6 +14,7 @@
     "view-unused-exports": "cd functions && npm run view-unused-exports",
     "git-prune-remote": "git remote update origin --prune",
     "git-prune-local": "npx git-removed-branches --prune --force",
+    "git-pull-all": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitPullAll.ps1",
     "git-sync": "git pull && npm run git-prune-remote && npm run git-prune-local"
   },
   "engines": {
