@@ -18,7 +18,8 @@
     "git-sync": "npm run git-pull-all && npm run git-prune-remote && npm run git-prune-local && npm run install"
   },
   "engines": {
-    "node": "16"
+    "node": "20",
+    "firebase-cli": "13.7.2"
   },
   "private": true
 }
