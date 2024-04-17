@@ -19,7 +19,7 @@
   },
   "engines": {
     "node": "20",
-    "firebase-cli": "13.7.2"
+    "firebase-tools": "13.7.2"
   },
   "private": true
 }
