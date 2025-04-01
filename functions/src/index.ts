@@ -16,6 +16,9 @@ import setCalculations from './setCalculations/endpoint/endpoint';
 import setCurrentAccount from './setCurrentAccount/endpoint/endpoint';
 import setExpense from './setExpense/endpoint/endpoint';
 import setIncome from './setIncome/endpoint/endpoint';
+import setCreditAccount from './setCreditAccount/endpoint/endpoint';
+import deleteCreditAccount from './deleteCreditAccount/endpoint/endpoint';
+import getCreditAccount from './getCreditAccount/endpoint/endpoint';
 
 const app = express();
 Middleware.initAdminSDK();
@@ -31,6 +34,10 @@ app.get('/getSavingsAccount', getSavingsAccount);
 app.post('/setCurrentAccount', setCurrentAccount);
 app.post('/deleteCurrentAccount', deleteCurrentAccount);
 app.get('/getCurrentAccount', getCurrentAccount);
+
+app.post('/setCreditAccount', setCreditAccount);
+app.post('/deleteCreditAccount', deleteCreditAccount);
+app.get('/getCreditAccount', getCreditAccount);
 
 app.post('/setExpense', setExpense);
 app.post('/deleteExpense', deleteExpense);
