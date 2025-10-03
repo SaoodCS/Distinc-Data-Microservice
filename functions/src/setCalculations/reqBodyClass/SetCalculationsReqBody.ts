@@ -10,6 +10,10 @@ export interface ISetCalculationsReqBody {
    }[];
    analytics: {
       totalIncomes: number;
+      incomeEarnings: {
+         name: string;
+         earned: number;
+      }[];
       totalExpenses: number;
       prevMonth: {
          totalSpendings: number;
