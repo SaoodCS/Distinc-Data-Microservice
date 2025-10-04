@@ -15,6 +15,7 @@ export interface ISetCalculationsReqBody {
          earned: number;
       }[];
       totalExpenses: number;
+      totalMonthlyExpenses: number;
       timestamp: string;
    }[];
 }
@@ -70,10 +71,12 @@ export default class SetCalculationsReqBody {
          if (typeof item !== 'object') return false;
          const totalIncomes = item['totalIncomes'];
          const totalExpenses = item['totalExpenses'];
+         const totalMonthlyExpenses = item['totalMonthlyExpenses'];
          const timestamp = item['timestamp'];
          if (
             typeof totalIncomes !== 'number' ||
             typeof totalExpenses !== 'number' ||
+            typeof totalMonthlyExpenses !== 'number' ||
             typeof timestamp !== 'string'
          )
             return false;
