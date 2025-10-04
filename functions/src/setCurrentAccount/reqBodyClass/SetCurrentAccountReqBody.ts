@@ -13,7 +13,7 @@ export default class SetCurrentAccountReqBody {
    static isValid(body: unknown): body is ISetCurrentAccountReqBody {
       const { accountName, minCushion, accountType, transferLeftoversTo, notes } =
          body as ISetCurrentAccountReqBody;
-      const isValidSalaryExpAccount =
+      const isValidIncomeExpAccount =
          typeof accountName === 'string' &&
          typeof notes === 'string' &&
          typeof minCushion === 'number' &&
@@ -26,7 +26,7 @@ export default class SetCurrentAccountReqBody {
          typeof accountType === 'string' &&
          (transferLeftoversTo === '' || typeof transferLeftoversTo === 'number');
 
-      if (accountType === 'Salary & Expenses') return isValidSalaryExpAccount;
+      if (accountType === 'Income & Expenses') return isValidIncomeExpAccount;
       if (accountType === 'Spending') return validSpendingAccount;
 
       return false;
