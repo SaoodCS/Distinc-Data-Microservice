@@ -10,6 +10,7 @@ export interface ISetCalculationsReqBody {
    }[];
    analytics: {
       totalIncomes: number;
+      totalDisposableIncome: number;
       incomeEarnings: {
          name: string;
          earned: number;
@@ -70,11 +71,13 @@ export default class SetCalculationsReqBody {
       for (const item of analytics) {
          if (typeof item !== 'object') return false;
          const totalIncomes = item['totalIncomes'];
+         const totalDisposableIncome = item['totalDisposableIncome'];
          const totalExpenses = item['totalExpenses'];
          const totalMonthlyExpenses = item['totalMonthlyExpenses'];
          const timestamp = item['timestamp'];
          if (
             typeof totalIncomes !== 'number' ||
+            typeof totalDisposableIncome !== 'number' ||
             typeof totalExpenses !== 'number' ||
             typeof totalMonthlyExpenses !== 'number' ||
             typeof timestamp !== 'string'
