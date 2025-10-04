@@ -1,6 +1,5 @@
 import DateHelper from '../../global/helpers/dataTypes/date/DateHelper';
 import type { ISetCalculationsReqBody } from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
-import SetCalculationsReqBody from '../../setCalculations/reqBodyClass/SetCalculationsReqBody';
 
 interface IDelCalcDistItem {
    type: 'analyticsItem' | 'distStepsItem' | 'savingsAccHistoryItem';
@@ -99,13 +98,11 @@ export default class DelCalculationsReqBody {
       const totalExpenses = (bodyDataField as ISetCalculationsReqBody['analytics'][0])[
          'totalExpenses'
       ];
-      const prevMonth = (bodyDataField as ISetCalculationsReqBody['analytics'][0])['prevMonth'];
       const timestamp = (bodyDataField as ISetCalculationsReqBody['analytics'][0])['timestamp'];
       if (
          typeof totalIncomes !== 'number' ||
          typeof totalExpenses !== 'number' ||
-         typeof timestamp !== 'string' ||
-         !SetCalculationsReqBody.isValidPrevMonth(prevMonth)
+         typeof timestamp !== 'string'
       )
          return false;
       return true;

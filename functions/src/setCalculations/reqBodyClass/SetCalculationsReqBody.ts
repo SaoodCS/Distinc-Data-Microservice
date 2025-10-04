@@ -15,11 +15,6 @@ export interface ISetCalculationsReqBody {
          earned: number;
       }[];
       totalExpenses: number;
-      prevMonth: {
-         totalSpendings: number;
-         totalDisposableSpending: number;
-         totalSavings: number;
-      };
       timestamp: string;
    }[];
 }
@@ -75,38 +70,14 @@ export default class SetCalculationsReqBody {
          if (typeof item !== 'object') return false;
          const totalIncomes = item['totalIncomes'];
          const totalExpenses = item['totalExpenses'];
-         const prevMonth = item['prevMonth'];
          const timestamp = item['timestamp'];
          if (
             typeof totalIncomes !== 'number' ||
             typeof totalExpenses !== 'number' ||
-            typeof timestamp !== 'string' ||
-            !SetCalculationsReqBody.isValidPrevMonth(prevMonth)
+            typeof timestamp !== 'string'
          )
             return false;
       }
-      return true;
-   }
-
-   static isValidPrevMonth(
-      prevMonth: unknown,
-   ): prevMonth is ISetCalculationsReqBody['analytics'][0]['prevMonth'] {
-      if (typeof prevMonth !== 'object') return false;
-      const totalSpendings = (prevMonth as ISetCalculationsReqBody['analytics'][0]['prevMonth'])[
-         'totalSpendings'
-      ];
-      const totalDisposableSpending = (
-         prevMonth as ISetCalculationsReqBody['analytics'][0]['prevMonth']
-      )['totalDisposableSpending'];
-      const totalSavings = (prevMonth as ISetCalculationsReqBody['analytics'][0]['prevMonth'])[
-         'totalSavings'
-      ];
-      if (
-         typeof totalSpendings !== 'number' ||
-         typeof totalDisposableSpending !== 'number' ||
-         typeof totalSavings !== 'number'
-      )
-         return false;
       return true;
    }
 }
