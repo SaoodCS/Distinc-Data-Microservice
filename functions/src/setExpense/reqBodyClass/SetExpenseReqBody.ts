@@ -1,5 +1,6 @@
 export interface ISetExpenseReqBody {
    expenseName: string;
+   notes: string;
    expenseValue: number;
    expenseType: string;
    paused: string;
@@ -10,15 +11,23 @@ export interface ISetExpenseReqBody {
 
 export default class SetExpenseReqBody {
    static isValid(body: unknown): body is ISetExpenseReqBody {
-      const { expenseName, expenseValue, expenseType, paused, hasDistInstruction, paymentMethod } =
-         body as ISetExpenseReqBody;
+      const {
+         expenseName,
+         expenseValue,
+         expenseType,
+         paused,
+         hasDistInstruction,
+         paymentMethod,
+         notes,
+      } = body as ISetExpenseReqBody;
       return (
          typeof expenseName === 'string' &&
          typeof expenseValue === 'number' &&
          typeof expenseType === 'string' &&
          typeof paymentMethod === 'string' &&
          typeof paused === 'string' &&
-         typeof hasDistInstruction === 'string'
+         typeof hasDistInstruction === 'string' &&
+         typeof notes === 'string'
       );
    }
 }

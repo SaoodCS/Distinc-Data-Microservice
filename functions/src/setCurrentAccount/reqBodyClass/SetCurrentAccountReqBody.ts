@@ -2,6 +2,7 @@ import type { OptionalNumberInput } from '../../SetSavingsAccount/reqBodyClass/S
 
 export interface ISetCurrentAccountReqBody {
    accountName: string;
+   notes: string;
    minCushion: number | '';
    accountType: string;
    transferLeftoversTo: OptionalNumberInput;
@@ -10,10 +11,11 @@ export interface ISetCurrentAccountReqBody {
 
 export default class SetCurrentAccountReqBody {
    static isValid(body: unknown): body is ISetCurrentAccountReqBody {
-      const { accountName, minCushion, accountType, transferLeftoversTo } =
+      const { accountName, minCushion, accountType, transferLeftoversTo, notes } =
          body as ISetCurrentAccountReqBody;
       const isValidSalaryExpAccount =
          typeof accountName === 'string' &&
+         typeof notes === 'string' &&
          typeof minCushion === 'number' &&
          typeof accountType === 'string' &&
          (transferLeftoversTo === '' || typeof transferLeftoversTo === 'number');
