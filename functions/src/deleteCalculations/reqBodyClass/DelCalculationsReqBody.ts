@@ -95,13 +95,13 @@ export default class DelCalculationsReqBody {
       const totalIncomes = (bodyDataField as ISetCalculationsReqBody['analytics'][0])[
          'totalIncomes'
       ];
-      const totalExpenses = (bodyDataField as ISetCalculationsReqBody['analytics'][0])[
-         'totalExpenses'
+      const actualExpenses = (bodyDataField as ISetCalculationsReqBody['analytics'][0])[
+         'actualExpenses'
       ];
       const timestamp = (bodyDataField as ISetCalculationsReqBody['analytics'][0])['timestamp'];
       if (
          typeof totalIncomes !== 'number' ||
-         typeof totalExpenses !== 'number' ||
+         typeof actualExpenses !== 'number' ||
          typeof timestamp !== 'string'
       )
          return false;
