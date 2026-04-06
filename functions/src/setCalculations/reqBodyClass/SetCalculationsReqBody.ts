@@ -15,7 +15,7 @@ export interface ISetCalculationsReqBody {
          name: string;
          earned: number;
       }[];
-      totalExpenses: number;
+      actualExpenses: number;
       totalMonthlyExpenses: number;
       timestamp: string;
    }[];
@@ -72,13 +72,13 @@ export default class SetCalculationsReqBody {
          if (typeof item !== 'object') return false;
          const totalIncomes = item['totalIncomes'];
          const totalDisposableIncome = item['totalDisposableIncome'];
-         const totalExpenses = item['totalExpenses'];
+         const actualExpenses = item['actualExpenses'];
          const totalMonthlyExpenses = item['totalMonthlyExpenses'];
          const timestamp = item['timestamp'];
          if (
             typeof totalIncomes !== 'number' ||
             typeof totalDisposableIncome !== 'number' ||
-            typeof totalExpenses !== 'number' ||
+            typeof actualExpenses !== 'number' ||
             typeof totalMonthlyExpenses !== 'number' ||
             typeof timestamp !== 'string'
          )
