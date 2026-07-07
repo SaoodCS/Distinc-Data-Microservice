@@ -35,10 +35,10 @@ jobs:
           DEV_SA_KEY: ${{ secrets.DEV_SA_KEY }}
           DEV_AND_PROD_ENV_VAR: ${{ secrets.DEV_AND_PROD_ENV_VAR }}
         run: |
-          echo "$DEV_AND_PROD_ENV_VAR" > .env
+          echo "$DEV_AND_PROD_ENV_VAR" > functions/.env
           echo "$DEV_SA_KEY" > /tmp/service_account.json
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
-          npm run build && firebase deploy --project distinc-dev --only functions:dataService
+          npm run deploy-dev
 
       - name: CD Phase - Deploy to Prod Project If Pushed To Prod Branch
         if: github.ref == 'refs/heads/prod'
@@ -46,7 +46,7 @@ jobs:
           PROD_SA_KEY: ${{ secrets.PROD_SA_KEY }}
           DEV_AND_PROD_ENV_VAR: ${{ secrets.DEV_AND_PROD_ENV_VAR }}
         run: |
-          echo "$DEV_AND_PROD_ENV_VAR" > .env
+          echo "$DEV_AND_PROD_ENV_VAR" > functions/.env
           echo "$PROD_SA_KEY" > /tmp/service_account.json
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/service_account.json
-          npm run build && firebase deploy --project distinc-9ad9d --only functions:dataService
+          npm run deploy-prod
